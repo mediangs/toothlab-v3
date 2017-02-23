@@ -128,6 +128,7 @@ export class ModelDetailPlainComponent implements OnInit {
   setIndexedLineSet(sectionLevel) {
     var keys = ['bdy_major_outline', 'cnl_pre_major_outline','cnl_pst_major_outline'];
 
+    // find nearest section level
     var section = this.sectionData.sections
       .reduce((prev, curr) =>
         Math.abs(curr.section - sectionLevel) < Math.abs(prev.section - sectionLevel) ? curr : prev);
