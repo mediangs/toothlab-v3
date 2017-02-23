@@ -19,9 +19,12 @@
       "tsconfig": "tsconfig.json",
       "prefix": "app",
       "styles": [
-        "styles.css"
+        "styles.css",
+        "../node_modules/x3dom/x3dom.css"
       ],
-      "scripts": [],
+      "scripts": [
+        "../node_modules/x3dom/x3dom.js"
+      ],
       "environmentSource": "environments/environment.ts",
       "environments": {
         "dev": "environments/environment.ts",

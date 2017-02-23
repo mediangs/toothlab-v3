@@ -1,0 +1,85 @@
+<!--view-source:http://x3dom.org/x3dom/example/x3dom_x3dElementCSSIntegration.html -->
+
+
+<div id="main">
+
+  <md-card id="title" *ngIf="!zoomed">
+    <md-card-header>
+      <md-card-title>{{specimen.id}}</md-card-title>
+    </md-card-header>
+    <md-card-content>
+    {{specimen.location}}<br>
+    {{specimen.description}}<br>
+    {{sectionData && sectionData.model.crv_name }}
+
+    </md-card-content>
+  </md-card>
+
+
+
+  <!--x3d  id="specimen" height="100%" width = "100%" showProgress='false' showStat='false' showLog='false' -->
+
+  <x3d id="model" height="70%" width="70%" [style.height.percent]="modelHeight"
+       [style.width.percent]="modelWidth" showProgress='false' showStat='false' showLog='false'>
+
+    <ul id="tools">
+      <li>
+        <button id="zoom-button" (click)="toggleZoom()">Zoom</button>
+      </li>
+    </ul>
+
+    <scene pickMode="texCoord">
+      <Viewpoint position="24.58412 2.30883 0.28578"
+                 orientation="-0.61420 0.54921 -0.56668 2.04426"
+                 zNear="0" zFar="100" description=""></Viewpoint>
+
+      <Transform translation="-4 -6 -8">
+
+        <Group *ngFor="let x3d of specimen.x3dModels">
+          <Inline [attr.nameSpaceName]='x3d.name' mapDEFToID="true"
+                  [attr.url]='specimen.path+x3d.name+".x3d"'></Inline>
+        </Group>
+
+        <Group *ngFor="let key of coordIndex | keys">
+          <shape>
+            <IndexedLineSet [attr.coordIndex]='coordIndex[key]'>
+              <Coordinate [attr.point]='coordPoints[key]'></Coordinate>
+            </IndexedLineSet>
+          </shape>
+        </Group>
+
+      </Transform>
+
+    </scene>
+  </x3d>
+
+
+
+  <div *ngIf="!zoomed">
+    <md-slider #value
+      class="example-margin"
+      [max]="sectionMax"
+      [thumb-label]="true"
+      [min]="sectionMin"
+      [step]="sectionStep"
+      [value]="currentSection"
+      (change)="updateSectionOutline(value.value)"
+    ></md-slider>{{currentSection | number:'.1'}}mm
+
+    <ul  *ngFor="let x3d of specimen.x3dModels">
+
+      <md-checkbox #value class="items" color="primary"
+                   [checked]="x3d.transparency < 1"
+                   (change) ="toggleModel(x3d, value.checked)" >
+        <md-icon class="md-24"  [style.color]="x3d.color">label</md-icon>
+          {{x3d.description}}</md-checkbox>
+
+
+    </ul>
+    <div>
+      <button (click)="reload()">Reload</button>
+      <button (click)="gotoAnatomy()">Back</button>
+      <button (click)="setIndexedLineSet(currentSection)">Gen. Outline</button>
+    </div>
+  </div>
+</div>
