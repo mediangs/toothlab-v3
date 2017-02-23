@@ -17,4 +17,4 @@ const routes = [
   {path : 'material', component : MaterialComponent}
 ];
 
-export default RouterModule.forRoot(routes);
+export const Routing = RouterModule.forRoot(routes);

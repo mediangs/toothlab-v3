@@ -5,7 +5,6 @@ import { HttpModule } from '@angular/http';
 
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 
-import appRoutes from './app.routes';
 import { MaterialModule} from "@angular/material";
 
 import { AppComponent } from './app.component';
@@ -21,6 +20,7 @@ import { PublicationsService } from "./services/publications.service";
 import { SpecimenService } from "./services/specimen.service";
 import { ModelDetailPlainComponent } from './model-detail-plain/model-detail-plain.component';
 import { KeysPipe } from './keys.pipe';
+import {Routing} from "./app.routes";
 
 @NgModule({
   declarations: [
@@ -39,7 +39,7 @@ import { KeysPipe } from './keys.pipe';
     FormsModule,
     HttpModule,
     MaterialModule.forRoot(),
-    appRoutes
+    Routing
   ],
   providers: [PeopleService, PublicationsService, SpecimenService],
   schemas: [NO_ERRORS_SCHEMA],
