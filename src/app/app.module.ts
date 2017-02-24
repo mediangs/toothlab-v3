@@ -21,6 +21,7 @@ import { SpecimenService } from "./services/specimen.service";
 import { ModelDetailPlainComponent } from './model-detail-plain/model-detail-plain.component';
 import { KeysPipe } from './keys.pipe';
 import {Routing} from "./app.routes";
+import { LinechartComponent } from './shared/linechart/linechart.component';
 
 @NgModule({
   declarations: [
@@ -32,7 +33,8 @@ import {Routing} from "./app.routes";
     PublicationsComponent,
     SpecimenListComponent,
     ModelDetailPlainComponent,
-    KeysPipe
+    KeysPipe,
+    LinechartComponent
   ],
   imports: [
     BrowserModule,
