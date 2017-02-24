@@ -55,7 +55,7 @@
 
   <div *ngIf="!zoomed">
     <md-slider #value
-      class="example-margin"
+      class="example-margin" [(ngModel)]="currentSection"
       [max]="sectionMax"
       [thumb-label]="true"
       [min]="sectionMin"
@@ -74,6 +74,8 @@
 
 
     </ul>
+    <app-linechart *ngIf="chartDataMindist" [data]="chartDataMindist"></app-linechart>
+
     <div>
       <button (click)="reload()">Reload</button>
       <button (click)="gotoAnatomy()">Back</button>

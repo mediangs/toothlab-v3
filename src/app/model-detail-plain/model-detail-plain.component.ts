@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {SpecimenService} from "../services/specimen.service";
 import {Specimen, X3dModel} from "../services/specimen-schema";
 import {Http} from "@angular/http";
-import {SectionModelSchema, SectionSechema, ViewSectionSchema} from "../services/section-schema";
+import {SectionModelSchema, ViewSectionSchema} from "../services/section-schema";
 
 declare var x3dom: any;
 
@@ -15,12 +15,12 @@ declare var x3dom: any;
 
 export class ModelDetailPlainComponent implements OnInit {
 
-  title = "Root canal anatomy detail";
-  zoomed = false;
-  isLoading = true;
+  private title = "Root canal anatomy detail";
+  private zoomed = false;
+  private isLoading = true;
 
-  specimen: Specimen;
-  specimenId: string;
+  private specimen: Specimen;
+  private specimenId: string;
 
   color: string = '#0ff';
   modelWidth = 100;
@@ -35,6 +35,7 @@ export class ModelDetailPlainComponent implements OnInit {
   sectionMin : number;
   sectionStep : number;
 
+  private chartDataMindist : Array<any>;
 
   constructor(private specimenService: SpecimenService,
               private route: ActivatedRoute,
@@ -67,6 +68,9 @@ export class ModelDetailPlainComponent implements OnInit {
         this.sectionMax = Math.max.apply(Math, data.sections.map(o=>o.section));
         this.sectionMin = Math.min.apply(Math, data.sections.map(o=>o.section));
         this.sectionStep = (this.sectionMax - this.sectionMin) / (data.sections.length -1);
+
+        this.chartDataMindist = data.sections.map(x=> [x.section, x.pre_mindist['thickness']]);
+        console.log(this.chartDataMindist);
 
       });
 

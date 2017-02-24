@@ -38,7 +38,7 @@ var ModelDetailPlainComponent = (function () {
             _this.sectionData = data;
             /*
             var outline;
-            var section: SectionSechema;
+            var section: SectionSchema;
 
             //section = this.sectionData.sections.filter(x => x.section === 1);
             var goal = 5;

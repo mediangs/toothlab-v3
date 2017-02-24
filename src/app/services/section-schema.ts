@@ -14,11 +14,17 @@ export interface SectionModelSchema {
     pts_of_opp_pre_crv: Array<Array<number>>,
     median_major_axis_vector: Array<number>
   },
-  sections: Array<SectionSechema>
+  sections: Array<SectionSchema>
 }
 
+export interface DentinThicknessSchema {
+  p_body : Array<number>,
+  p_canal : Array<number>,
+  thickness : number,
+  angle : number
+}
 
-export interface SectionSechema{
+export interface SectionSchema{
   section : number,
 
   bdy_major_outline : Array<Array<number>>,
@@ -29,12 +35,14 @@ export interface SectionSechema{
   cnl_pre_opp_major_outline : Array<Array<number>>,
   cnl_pst_opp_major_outline : Array<Array<number>>,
 
+  pre_mindist : DentinThicknessSchema,
+  pst_mindist : DentinThicknessSchema,
+
   cnl_pre_major_outline_exist : boolean,
   tangential_CH_pt_at_pst_crv : Array<number>,
   cwt_ratio : number,
   pt_at_pst_crv : Array<number>,
   cnl_straightened : Array<any>,
-  pst_mindist : Array<any>,
   cnl_pre_narrow : Array<any>,
   CH_pt_at_pst_crv : Array<number>,
   major_axis_vector : Array<number>,
@@ -50,7 +58,6 @@ export interface SectionSechema{
   cnl_pre_wide : Array<any>,
   pt_at_pre_crv : Array<number>,
   pt_cnl_pre_cwt : Array<number>,
-  pre_mindist : Array<any>,
   cnl_straightening : Array<any>,
   major_axis_t_vector : Array<number>,
   cnl_pst_wide : Array<any>,
