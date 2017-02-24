@@ -1,9 +1,15 @@
-<a routerLink="">Home</a>
-<a routerLink="specimen-list">Models</a>
-<a routerLink="people">People</a>
-<a routerLink="publications">Publications</a>
+<md-toolbar color="primary" class="fixed-toolbar" [break]="190" breakAction="show">
+  <div class="md-toolbar-tools">
+    <button md-button class="md-primary" [routerLink]="['']">ToothLab</button>
+    <button md-button class="md-primary" [routerLink]="['specimen-list']">Models</button>
+    <button md-button class="md-primary" [routerLink]="['people']">People</button>
+    <button md-button class="md-primary" [routerLink]="['publications']">Publications</button>
 
-<a routerLink="material">Material</a>
-<a routerLink="about">About</a>
+    <button md-button class="md-primary" [routerLink]="['material']">Material</button>
+    <button md-button class="md-primary" [routerLink]="['about']">about</button>
 
-<router-outlet></router-outlet>
+  </div>
+</md-toolbar>
+<md-content>
+  <router-outlet></router-outlet>
+</md-content>

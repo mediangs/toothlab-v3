@@ -126,7 +126,10 @@ export class ModelDetailPlainComponent implements OnInit {
 
 
   setIndexedLineSet(sectionLevel) {
-    var keys = ['bdy_major_outline', 'cnl_pre_major_outline','cnl_pst_major_outline'];
+    var keys = ['bdy_major_outline',
+                'cnl_pre_major_outline',
+                'cnl_pst_major_outline',
+                'cnl_pre_opp_major_outline'];
 
     // find nearest section level
     var section = this.sectionData.sections

@@ -63,4 +63,5 @@ export interface  ViewSectionSchema{
   bdy_major_outline? : any,
   cnl_pre_major_outline? : any,
   cnl_pst_major_outline? : any,
+  cnl_pre_opp_major_outline? : any,
 }
