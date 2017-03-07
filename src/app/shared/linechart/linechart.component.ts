@@ -19,12 +19,17 @@ export class LinechartComponent implements OnInit {
   private colors: any;
   private xAxis: any;
   private yAxis: any;
+  private line : any;
 
   constructor() { }
 
   ngOnInit() {
     this.createChart();
     if(this.data){
+      this.data.forEach(d =>{
+        d.x = d[0];
+        d.y = d[1];
+      })
       this.updateChart();
     }
   }
@@ -49,11 +54,19 @@ export class LinechartComponent implements OnInit {
       .attr('transform',`translate(${this.margin.left}, ${this.margin.top})` );
 
     //define X & Y domains
-    let xDomain = this.data.map(d => d[0]);
-    let yDomain = [0, d3.max(this.data, d=>d[1])];
+    //let xDomain = this.data.map(d => d[0]);
+    let xDomain = [0, d3.max(this.data, function(d){
+      console.log(d);
+      return d.x;
+    })];
+    let yDomain = [0, d3.max(this.data, d=>d.y)];
+
+
+    //console.log(this.data);
 
     //create scale
-    this.xScale = d3.scaleBand().padding(0.1).domain(xDomain).rangeRound([0, this.width]);
+    //this.xScale = d3.scaleBand().padding(0.1).domain(xDomain).rangeRound([0, this.width]);
+    this.xScale = d3.scaleLinear().domain(xDomain).range([0, this.width]);
     this.yScale = d3.scaleLinear().domain(yDomain).range([this.height,0]);
 
     // bar colors
@@ -70,43 +83,61 @@ export class LinechartComponent implements OnInit {
       .attr('transform', `translate(${this.margin.left}, ${this.margin.top})`)
       .call(d3.axisLeft(this.yScale));
 
+    //console.log(this.xScale(3));
+
+
+    this.line = d3.line()
+      .x(function(d){
+        console.log(typeof d);
+        return  this.xScale(d[0]);
+      })
+      .y(d=>this.yScale(d[1]));
+
   }
 
   updateChart(){
     // update scales & axis
-    this.xScale.domain(this.data.map(d => d[0]));
+    //this.xScale.domain(this.data.map(d => d[0]));
+    this.xScale.domain([0, d3.max(this.data, d => d[0])]);
     this.yScale.domain([0, d3.max(this.data, d => d[1])]);
     this.colors.domain([0, this.data.length]);
     this.xAxis.transition().call(d3.axisBottom(this.xScale));
     this.yAxis.transition().call(d3.axisLeft(this.yScale));
 
-    let update = this.chart.selectAll('.bar')
+
+    var update = this.chart.selectAll('.line')
       .data(this.data);
+
+    //console.log(this.data);
 
     // remove exiting bars
     update.exit().remove();
 
     // update existing bars
-    this.chart.selectAll('.bar').transition()
+/*
+    this.chart.selectAll('.line').transition()
       .attr('x', d => this.xScale(d[0]))
       .attr('y', d => this.yScale(d[1]))
       .attr('width', d => this.xScale.bandwidth())
       .attr('height', d => this.height - this.yScale(d[1]))
       .style('fill', (d, i) => this.colors(i));
+*/
+    this.chart.selectAll('.line').transition()
+      .attr('d', d => this.line(d))
+      .style('stroke', '#FF9900')
+      .style('stroke-width', 2)
+      .style('fill', 'none');
+
 
     // add new bars
     update
       .enter()
-      .append('rect')
-      .attr('class', 'bar')
-      .attr('x', d => this.xScale(d[0]))
-      .attr('y', d => this.yScale(0))
-      .attr('width', this.xScale.bandwidth())
-      .attr('height', 0)
-      .style('fill', (d, i) => this.colors(i))
-      .transition()
-      .delay((d, i) => i * 10)
-      .attr('y', d => this.yScale(d[1]))
-      .attr('height', d => this.height - this.yScale(d[1]));
+      .append('path')
+      .attr('class', 'line')
+      .attr('d', d=>this.line(d))
+      .style('stroke', '#FF9900')
+      .style('stroke-width', 2)
+      .style('fill', 'none');
+
   }
 }

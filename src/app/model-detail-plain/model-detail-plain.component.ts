@@ -69,8 +69,8 @@ export class ModelDetailPlainComponent implements OnInit {
         this.sectionMin = Math.min.apply(Math, data.sections.map(o=>o.section));
         this.sectionStep = (this.sectionMax - this.sectionMin) / (data.sections.length -1);
 
-        this.chartDataMindist = data.sections.map(x=> [x.section, x.pre_mindist['thickness']]);
-        console.log(this.chartDataMindist);
+        this.chartDataMindist = data.sections.map(x=> [x.section, x.pre_mindist[2]]);
+        // console.log(this.chartDataMindist);
 
       });
 
