@@ -7,6 +7,8 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 
 import { MaterialModule} from "@angular/material";
 
+import {nvD3} from 'ng2-nvd3';
+
 import { AppComponent } from './app.component';
 import { HomeComponent} from "./home/home.component";
 import { AboutComponent} from "./about/about.component";
@@ -21,7 +23,6 @@ import { SpecimenService } from "./services/specimen.service";
 import { ModelDetailPlainComponent } from './model-detail-plain/model-detail-plain.component';
 import { KeysPipe } from './keys.pipe';
 import {Routing} from "./app.routes";
-import { LinechartComponent } from './shared/linechart/linechart.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,7 @@ import { LinechartComponent } from './shared/linechart/linechart.component';
     SpecimenListComponent,
     ModelDetailPlainComponent,
     KeysPipe,
-    LinechartComponent
+    nvD3,
   ],
   imports: [
     BrowserModule,
