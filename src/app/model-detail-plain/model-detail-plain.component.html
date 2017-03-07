@@ -74,7 +74,10 @@
 
 
     </ul>
-    <app-linechart *ngIf="chartDataMindist" [data]="chartDataMindist"></app-linechart>
+    <div>
+      <nvd3 [options]="chartOptions" [data]="chartData"></nvd3>
+    </div>
+
 
     <div>
       <button (click)="reload()">Reload</button>

@@ -5,7 +5,9 @@ import {Specimen, X3dModel} from "../services/specimen-schema";
 import {Http} from "@angular/http";
 import {SectionModelSchema, ViewSectionSchema} from "../services/section-schema";
 
-declare var x3dom: any;
+declare let x3dom: any;
+declare let d3: any;
+
 
 @Component({
   selector: 'app-model-detail-plain',
@@ -21,6 +23,9 @@ export class ModelDetailPlainComponent implements OnInit {
 
   private specimen: Specimen;
   private specimenId: string;
+
+  private chartOptions;
+  private chartData;
 
   color: string = '#0ff';
   modelWidth = 100;
@@ -51,6 +56,34 @@ export class ModelDetailPlainComponent implements OnInit {
       this.specimen = this.specimenService.getSpecimenById(this.specimenId);
     });
 
+    this.chartOptions = {
+      chart: {
+        type: 'lineChart',
+        height: 350,
+        margin : {
+          top: 20,
+          right: 20,
+          bottom: 40,
+          left: 55
+        },
+        x: function(d){ return d[0]; },
+        y: function(d){ return d[1]; },
+        useInteractiveGuideline: true,
+        xAxis: {
+          axisLabel: 'Distance from apex(mm)'
+        },
+        yAxis: {
+          axisLabel: 'Dentin thickness (mm)',
+          tickFormat: function(d){
+            return d3.format('.01f')(d);
+          },
+          axisLabelDistance: -1
+        }
+      }
+    };
+
+
+
     //color-picker사용을 위해 소문자로 바꾸어야함 ??
     this.specimen.x3dModels.forEach(el => {
       el.color = el.color.toLowerCase();
@@ -69,12 +102,41 @@ export class ModelDetailPlainComponent implements OnInit {
         this.sectionMin = Math.min.apply(Math, data.sections.map(o=>o.section));
         this.sectionStep = (this.sectionMax - this.sectionMin) / (data.sections.length -1);
 
-        this.chartDataMindist = data.sections.map(x=> [x.section, x.pre_mindist['thickness']]);
-        console.log(this.chartDataMindist);
+        this.chartData = [
+          {
+            values: data.sections.map(d=> [d.section, d.pre_mindist[2]]),   //values - represents the array of {x,y} data points
+            key: 'Thinnest dentin(pre)', //key  - the name of the series.
+            color: '#ff7f0e'  //color - optional: choose your own line color.
+          },
+
+          {
+            values: data.sections.map(d=> [d.section, d.pst_mindist[2]]),   //values - represents the array of {x,y} data points
+            key: 'Thinnest dentin(post)', //key  - the name of the series.
+            color: '#2ca02c'
+          },
+
+          {
+            values: data.sections.map(d=> [d.section, d.cwt_ratio]),   //values - represents the array of {x,y} data points
+            key: 'Canal wall thinning(%)', //key  - the name of the series.
+          },
+
+          {
+            values: data.sections.map(d=> [d.section, d.area_cnl_pre]),   //values - represents the array of {x,y} data points
+            key: 'Canal area, Pre (mm2)', //key  - the name of the series.
+          },
+
+          {
+            values: data.sections.map(d=> [d.section, d.area_cnl_pst]),   //values - represents the array of {x,y} data points
+            key: 'Canal area, Post (mm2)', //key  - the name of the series.
+          }
+
+
+        ];
 
       });
 
   }
+
 
   updateModelColor(x3d) {
     var el = document.getElementById(x3d.name + '__MA');
