@@ -24,7 +24,7 @@ export const people: People[] =
     },
     {
         "name" : "Lee Kyeongeon",
-        "role" : "Investor, Professional gamer(Boom beach, Yu-gi-oh card), 6th grade, Samjungja elementary school",
+        "role" : "Investor, Prodigy, Professional gamer(Boom beach, Yu-gi-oh card), 1th grade, Samjungja middle school",
         "photo" : "jeongkyu.jpg"
     },
     {

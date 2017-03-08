@@ -78,6 +78,24 @@ export class ModelDetailPlainComponent implements OnInit {
             return d3.format('.01f')(d);
           },
           axisLabelDistance: -1
+        },
+        lines: {
+          dispatch: {
+            elementClick: function(e) {
+              console.log('clicked!');
+              console.log(e);
+              //this.updateSectionOutline(e[0].point[0]);
+            },
+            elementMouseover: function(e){
+              console.log('mouse over');
+              console.log(e);
+            },
+            elementDblClick: function(e){
+              console.log('mouse out!');
+              console.log(e);
+            }
+
+          }
         }
       }
     };
