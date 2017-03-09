@@ -23,6 +23,7 @@ import { SpecimenService } from "./services/specimen.service";
 import { ModelDetailPlainComponent } from './model-detail-plain/model-detail-plain.component';
 import { KeysPipe } from './keys.pipe';
 import {Routing} from "./app.routes";
+import {ChartService} from "./services/chart.service";
 
 @NgModule({
   declarations: [
@@ -44,7 +45,12 @@ import {Routing} from "./app.routes";
     MaterialModule.forRoot(),
     Routing
   ],
-  providers: [PeopleService, PublicationsService, SpecimenService],
+  providers: [
+    PeopleService,
+    PublicationsService,
+    SpecimenService,
+    ChartService
+  ],
   schemas: [NO_ERRORS_SCHEMA],
   bootstrap: [AppComponent]
 })

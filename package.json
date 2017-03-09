@@ -23,7 +23,7 @@
     "@angular/router": "^3.4.0",
     "core-js": "^2.4.1",
     "d3": "^3.5.15",
-    "ng2-nvd3": "git+https://github.com/MaibornWolff/ng2-nvd3.git",
+    "ng2-nvd3": "git+https://github.com/MaibornWolff/ng2-nvd3.git#7821964122cd929a9faa8cb2537e5fcbf6d0f173",
     "nvd3": "^1.8.5",
     "rxjs": "^5.1.0",
     "x3dom": "^1.7.2",

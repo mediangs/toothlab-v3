@@ -4,6 +4,7 @@ import {SpecimenService} from "../services/specimen.service";
 import {Specimen, X3dModel} from "../services/specimen-schema";
 import {Http} from "@angular/http";
 import {SectionModelSchema, ViewSectionSchema} from "../services/section-schema";
+import {ChartService} from "../services/chart.service";
 
 declare let x3dom: any;
 declare let d3: any;
@@ -35,19 +36,24 @@ export class ModelDetailPlainComponent implements OnInit {
   coordIndex : ViewSectionSchema = {} ;
   coordPoints: ViewSectionSchema = {} ;
 
-  currentSection = 0;
+  currentSection:number = 0;
   sectionMax : number;
   sectionMin : number;
   sectionStep : number;
 
-  private chartDataMindist : Array<any>;
 
   constructor(private specimenService: SpecimenService,
               private route: ActivatedRoute,
               private router: Router,
-              private el: ElementRef,
               private renderer: Renderer,
+              private chartService : ChartService,
+              private el: ElementRef,
               private http: Http) {
+    chartService.activeSection$.subscribe(
+      section => {
+        this.currentSection = section;
+      }
+    );
   }
 
   ngOnInit() {
@@ -84,6 +90,12 @@ export class ModelDetailPlainComponent implements OnInit {
             elementClick: function(e) {
               console.log('clicked!');
               console.log(e);
+              console.log();
+              var point = e[0].point[0];
+
+
+              //this.chartService.getActiveSection(point);
+
               //this.updateSectionOutline(e[0].point[0]);
             },
             elementMouseover: function(e){

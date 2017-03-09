@@ -17,7 +17,7 @@
 
   <!--x3d  id="specimen" height="100%" width = "100%" showProgress='false' showStat='false' showLog='false' -->
 
-  <x3d id="model" height="70%" width="70%" [style.height.percent]="modelHeight"
+  <x3d id="model" height="90%" width="90%" [style.height.percent]="modelHeight"
        [style.width.percent]="modelWidth" showProgress='false' showStat='false' showLog='false'>
 
     <ul id="tools">
@@ -52,10 +52,10 @@
   </x3d>
 
 
-
-  <div *ngIf="!zoomed">
+  <div *ngIf="!zoomed" style="display:block;margin: 10px; border: solid gray 1px; ">
     <md-slider #value
-      class="example-margin" [(ngModel)]="currentSection"
+      class="example-margin"
+      [(ngModel)]="currentSection"
       [max]="sectionMax"
       [thumb-label]="true"
       [min]="sectionMin"
