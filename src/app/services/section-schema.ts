@@ -35,28 +35,29 @@ export interface SectionSchema{
   cnl_pre_opp_major_outline : Array<Array<number>>,
   cnl_pst_opp_major_outline : Array<Array<number>>,
 
-  pre_mindist : any, // DentinThicknessSchema,
-  pst_mindist : any, //DentinThicknessSchema,
+  pre_mindist : any, // load후 object 로 변환,
+  pst_mindist : any, //load후 object 로 변환,
 
-  pre_mindist_line : Array<Array<number>>;  //Data load후 추가함 [pre_mindist.p_body, pre_mindist.p_canal]
-  pst_mindist_line : Array<Array<number>>;  //
+  pre_mindist_line : Array<Array<number>>,  //Data load후 추가함 [pre_mindist.p_body, pre_mindist.p_canal]
+  pst_mindist_line : Array<Array<number>>,  //
+
+  cnl_transportation : any, //load후 object 로 변환,
+  cnl_straightened : any,
+  cnl_straightening : any,
+
+  cnl_pre_narrow : any,
+  cnl_pst_narrow: any,
+
+  cnl_pre_wide : any,
+  cnl_pst_wide : any,
 
   cwt_ratio : number,
   area_cnl_pst : number,
   area_cnl_pre : number,
 
-  cnl_transportation : Array<any>,
-
-  cnl_pre_narrow : Array<any>,
-  cnl_pst_narrow: Array<any>,
-
-  cnl_pre_wide : Array<any>,
-  cnl_pst_wide : Array<any>,
-
   cnl_pre_major_outline_exist : boolean,
   tangential_CH_pt_at_pst_crv : Array<number>,
   pt_at_pst_crv : Array<number>,
-  cnl_straightened : Array<any>,
   CH_pt_at_pst_crv : Array<number>,
   major_axis_vector : Array<number>,
   median_major_axis_used : boolean,
@@ -66,7 +67,6 @@ export interface SectionSchema{
   bdy_major_outline_exist : boolean,
   pt_at_pre_crv : Array<number>,
   pt_cnl_pre_cwt : Array<number>,
-  cnl_straightening : Array<any>,
   major_axis_t_vector : Array<number>,
   cnl_pst_major_outline_exist: boolean,
   CH_pt_at_CH_axis : Array<number>,

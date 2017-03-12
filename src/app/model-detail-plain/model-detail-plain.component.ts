@@ -74,12 +74,24 @@ export class ModelDetailPlainComponent implements OnInit {
       .subscribe(data => {
 
         let DentinThickness = namedlist(['p_body', 'p_canal', 'thickness', 'angle']);
+        let CanalDimension = namedlist(['p1', 'p2', 'width']);
+        let FileMovement = namedlist(['vector', 'angle']);
 
         data.sections.forEach(d=>{
           d.pre_mindist = DentinThickness(d.pre_mindist);
           d.pst_mindist = DentinThickness(d.pst_mindist);
           d.pre_mindist_line = [d.pre_mindist.p_body, d.pre_mindist.p_canal];
           d.pst_mindist_line = [d.pst_mindist.p_body, d.pst_mindist.p_canal];
+
+          d.cnl_pre_narrow = CanalDimension(d.cnl_pre_narrow);
+          d.cnl_pst_narrow = CanalDimension(d.cnl_pst_narrow);
+          d.cnl_pre_wide = CanalDimension(d.cnl_pre_wide);
+          d.cnl_pst_wide = CanalDimension(d.cnl_pst_wide);
+
+          d.cnl_transportation = FileMovement(d.cnl_transportation);
+          d.cnl_straightened = FileMovement(d.cnl_straightened);
+          d.cnl_straightening = FileMovement(d.cnl_straightening);
+
         });
 
         this.sectionData = data;
@@ -94,7 +106,7 @@ export class ModelDetailPlainComponent implements OnInit {
 
   }
 
-  setChartData(data){
+  setChartData(data : SectionModelSchema){
 
     this.chartData = [
       {
