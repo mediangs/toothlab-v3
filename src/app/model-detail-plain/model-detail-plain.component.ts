@@ -3,8 +3,9 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {SpecimenService} from "../services/specimen.service";
 import {Specimen, X3dModel} from "../services/specimen-schema";
 import {Http} from "@angular/http";
-import {SectionModelSchema, ViewSectionSchema} from "../services/section-schema";
+import {SectionModelSchema, ViewSectionSchema, DentinThicknessSchema} from "../services/section-schema";
 import {ChartService} from "../services/chart.service";
+import {namedlist} from "../shared/utils";
 
 declare let x3dom: any;
 declare let d3: any;
@@ -20,7 +21,6 @@ export class ModelDetailPlainComponent implements OnInit {
 
   private title = "Root canal anatomy detail";
   private zoomed = false;
-  private isLoading = true;
 
   private specimen: Specimen;
   private specimenId: string;
@@ -62,6 +62,72 @@ export class ModelDetailPlainComponent implements OnInit {
       this.specimen = this.specimenService.getSpecimenById(this.specimenId);
     });
 
+
+    //color-picker사용을 위해 소문자로 바꾸어야함 ??
+    this.specimen.x3dModels.forEach(el => {
+      el.color = el.color.toLowerCase();
+    });
+
+    x3dom.reload();
+
+    this.specimenService.getSectionData(this.specimen)
+      .subscribe(data => {
+
+        let DentinThickness = namedlist(['p_body', 'p_canal', 'thickness', 'angle']);
+
+        data.sections.forEach(d=>{
+          d.pre_mindist = DentinThickness(d.pre_mindist);
+          d.pst_mindist = DentinThickness(d.pst_mindist);
+          d.pre_mindist_line = [d.pre_mindist.p_body, d.pre_mindist.p_canal];
+          d.pst_mindist_line = [d.pst_mindist.p_body, d.pst_mindist.p_canal];
+        });
+
+        this.sectionData = data;
+        this.sectionMax = Math.max.apply(Math, data.sections.map(o=>o.section));
+        this.sectionMin = Math.min.apply(Math, data.sections.map(o=>o.section));
+        this.sectionStep = (this.sectionMax - this.sectionMin) / (data.sections.length -1);
+
+        this.setChartData(data);
+      });
+
+    this.setChartOptions();
+
+  }
+
+  setChartData(data){
+
+    this.chartData = [
+      {
+        values: data.sections.map(d=> [d.section, d.pre_mindist.thickness]),   //values - represents the array of {x,y} data points
+        key: 'Thinnest dentin(pre)', //key  - the name of the series.
+        color: '#ff7f0e'  //color - optional: choose your own line color.
+      },
+
+      {
+        values: data.sections.map(d=> [d.section, d.pst_mindist.thickness]),
+        key: 'Thinnest dentin(post)',
+        color: '#2ca02c'
+      },
+
+      {
+        values: data.sections.map(d=> [d.section, d.cwt_ratio]),
+        key: 'Canal wall thinning(%)',
+      },
+
+      {
+        values: data.sections.map(d=> [d.section, d.area_cnl_pre]),
+        key: 'Canal area, Pre (mm2)',
+      },
+
+      {
+        values: data.sections.map(d=> [d.section, d.area_cnl_pst]),
+        key: 'Canal area, Post (mm2)',
+      }
+    ];
+  }
+
+  setChartOptions(){
+
     this.chartOptions = {
       chart: {
         type: 'lineChart',
@@ -70,7 +136,7 @@ export class ModelDetailPlainComponent implements OnInit {
           top: 20,
           right: 20,
           bottom: 40,
-          left: 55
+          left: 60
         },
         x: function(d){ return d[0]; },
         y: function(d){ return d[1]; },
@@ -81,7 +147,7 @@ export class ModelDetailPlainComponent implements OnInit {
         yAxis: {
           axisLabel: 'Dentin thickness (mm)',
           tickFormat: function(d){
-            return d3.format('.01f')(d);
+            return d3.format('.02f')(d);
           },
           axisLabelDistance: -1
         },
@@ -111,62 +177,7 @@ export class ModelDetailPlainComponent implements OnInit {
         }
       }
     };
-
-
-
-    //color-picker사용을 위해 소문자로 바꾸어야함 ??
-    this.specimen.x3dModels.forEach(el => {
-      el.color = el.color.toLowerCase();
-    });
-
-    x3dom.reload();
-
-    //this.restoreModelStatus()
-    this.isLoading = false;
-
-    this.specimenService.getSectionData(this.specimen)
-      .subscribe(data => {
-
-        this.sectionData = data;
-        this.sectionMax = Math.max.apply(Math, data.sections.map(o=>o.section));
-        this.sectionMin = Math.min.apply(Math, data.sections.map(o=>o.section));
-        this.sectionStep = (this.sectionMax - this.sectionMin) / (data.sections.length -1);
-
-        this.chartData = [
-          {
-            values: data.sections.map(d=> [d.section, d.pre_mindist[2]]),   //values - represents the array of {x,y} data points
-            key: 'Thinnest dentin(pre)', //key  - the name of the series.
-            color: '#ff7f0e'  //color - optional: choose your own line color.
-          },
-
-          {
-            values: data.sections.map(d=> [d.section, d.pst_mindist[2]]),   //values - represents the array of {x,y} data points
-            key: 'Thinnest dentin(post)', //key  - the name of the series.
-            color: '#2ca02c'
-          },
-
-          {
-            values: data.sections.map(d=> [d.section, d.cwt_ratio]),   //values - represents the array of {x,y} data points
-            key: 'Canal wall thinning(%)', //key  - the name of the series.
-          },
-
-          {
-            values: data.sections.map(d=> [d.section, d.area_cnl_pre]),   //values - represents the array of {x,y} data points
-            key: 'Canal area, Pre (mm2)', //key  - the name of the series.
-          },
-
-          {
-            values: data.sections.map(d=> [d.section, d.area_cnl_pst]),   //values - represents the array of {x,y} data points
-            key: 'Canal area, Post (mm2)', //key  - the name of the series.
-          }
-
-
-        ];
-
-      });
-
   }
-
 
   updateModelColor(x3d) {
     var el = document.getElementById(x3d.name + '__MA');
@@ -210,10 +221,8 @@ export class ModelDetailPlainComponent implements OnInit {
     var button = document.getElementById('zoom-button');
     if (this.zoomed) {
       button.style.backgroundColor = "#202021";
-
     } else {
       button.style.backgroundColor = "#c23621";
-
     }
 
     this.zoomed = !this.zoomed;
@@ -222,21 +231,26 @@ export class ModelDetailPlainComponent implements OnInit {
 
 
   setIndexedLineSet(sectionLevel) {
-    var keys = ['bdy_major_outline',
+    var keys_outline = ['bdy_major_outline',
                 'cnl_pre_major_outline',
                 'cnl_pst_major_outline',
-                'cnl_pre_opp_major_outline'];
+                'cnl_pre_opp_major_outline',
+                'pre_mindist_line',
+                'pst_mindist_line'];
+
 
     // find nearest section level
     var section = this.sectionData.sections
       .reduce((prev, curr) =>
         Math.abs(curr.section - sectionLevel) < Math.abs(prev.section - sectionLevel) ? curr : prev);
 
-    keys.forEach(key => {
+    keys_outline.forEach(key => {
       var outline = section[key];
       this.coordPoints[key] = [].concat.apply([], outline);
       this.coordIndex[key]  = Object.keys(outline).map(x=>Number(x)).concat(0);
     });
+
+
   }
 
   gotoAnatomy() {

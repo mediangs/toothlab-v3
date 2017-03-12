@@ -35,8 +35,11 @@ export interface SectionSchema{
   cnl_pre_opp_major_outline : Array<Array<number>>,
   cnl_pst_opp_major_outline : Array<Array<number>>,
 
-  pre_mindist : DentinThicknessSchema,
-  pst_mindist : DentinThicknessSchema,
+  pre_mindist : any, // DentinThicknessSchema,
+  pst_mindist : any, //DentinThicknessSchema,
+
+  pre_mindist_line : Array<Array<number>>;  //Data load후 추가함 [pre_mindist.p_body, pre_mindist.p_canal]
+  pst_mindist_line : Array<Array<number>>;  //
 
   cwt_ratio : number,
   area_cnl_pst : number,
