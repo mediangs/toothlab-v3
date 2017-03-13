@@ -8,26 +8,51 @@
       <md-card-title>{{specimen.id}}</md-card-title>
     </md-card-header>
     <md-card-content>
-    {{specimen.location}}<br>
-    {{specimen.description}}<br>
+      {{specimen.location}}<br>
+      {{specimen.description}}<br>
     </md-card-content>
   </md-card>
 
-
-
-  <!--x3d  id="specimen" height="100%" width = "100%" showProgress='false' showStat='false' showLog='false' -->
-  <div style="display: block">
-  <x3d id="model" height="90%" width="90%"
-       [style.height.percent]="modelHeight"
-       [style.width.percent]="modelWidth"
-       style="display: inline-block; padding: 10px; margin-right: 10px"
-       showProgress='false' showStat='false' showLog='false'>
+  <x3d id="x3d-container" showProgress='false' showStat='false' showLog='false'
+       [ngClass]="{'x3d-zoom': zoomed}">
 
     <ul id="tools">
       <li>
         <button id="zoom-button" (click)="toggleZoom()">Zoom</button>
       </li>
     </ul>
+
+    <ul id="x3d-list">
+      <li *ngFor="let x3d of specimen.x3dModels">
+        <md-checkbox
+          #value
+          class="items"
+          color="primary"
+          [checked]="x3d.transparency < 1"
+          (change)="toggleModel(x3d, value.checked)">
+          <md-icon class="md-24"
+                   style="vertical-align: middle;"
+                   [style.color]="x3d.color">label
+          </md-icon>
+          {{x3d.description}}
+        </md-checkbox>
+      </li>
+    </ul>
+
+    <div id="section-slider">
+      <md-slider #value
+                 vertical="true"
+                 [(ngModel)]="currentSection"
+                 [max]="sectionMax"
+                 [thumb-label]="true"
+                 [min]="sectionMin"
+                 [step]="sectionStep"
+                 [value]="currentSection"
+                 (change)="updateSectionOutline(value.value)"
+      ></md-slider>
+      {{currentSection | number:'.1'}}mm
+    </div>
+
 
     <scene pickMode="texCoord">
       <Viewpoint position="24.58412 2.30883 0.28578"
@@ -53,48 +78,15 @@
 
     </scene>
   </x3d>
-  </div>
+</div>
 
 
-  <div *ngIf="!zoomed" style="display:block;margin: 10px; border: solid gray 1px; ">
-    <md-slider #value
-      class="example-margin"
-      [(ngModel)]="currentSection"
-      [max]="sectionMax"
-      [thumb-label]="true"
-      [min]="sectionMin"
-      [step]="sectionStep"
-      [value]="currentSection"
-      (change)="updateSectionOutline(value.value)"
-    ></md-slider>{{currentSection | number:'.1'}}mm
-  </div>
-
-  <div>
-    <ul>
-      <li *ngFor="let x3d of specimen.x3dModels">
-    <md-checkbox
-
-      #value
-      class="items"
-      color="primary"
-      [checked]="x3d.transparency < 1"
-      (change) ="toggleModel(x3d, value.checked)" >
-      <md-icon class="md-24"  [style.color]="x3d.color">label</md-icon>
-        {{x3d.description}}
-    </md-checkbox>
-      </li>
-    </ul>
+<div *ngIf="!zoomed">
+  <nvd3 [options]="chartOptions" [data]="chartData"></nvd3>
+</div>
 
 
-    <div>
-      <nvd3 [options]="chartOptions" [data]="chartData"></nvd3>
-    </div>
-
-
-    <div>
-      <button (click)="reload()">Reload</button>
-      <button (click)="gotoAnatomy()">Back</button>
-      <button (click)="setIndexedLineSet(currentSection)">Gen. Outline</button>
-    </div>
-  </div>
+<div>
+  <button (click)="reload()">Reload</button>
+  <button (click)="gotoAnatomy()">Back</button>
 </div>

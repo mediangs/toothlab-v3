@@ -143,12 +143,12 @@ export class ModelDetailPlainComponent implements OnInit {
     this.chartOptions = {
       chart: {
         type: 'lineChart',
-        height: 350,
+        height: 200,
         margin : {
           top: 20,
-          right: 20,
+          right: 40,
           bottom: 40,
-          left: 60
+          left: 80
         },
         x: function(d){ return d[0]; },
         y: function(d){ return d[1]; },
