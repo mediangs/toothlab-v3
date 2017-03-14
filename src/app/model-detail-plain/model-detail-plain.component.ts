@@ -3,7 +3,7 @@ import {ActivatedRoute, Router} from "@angular/router";
 import {SpecimenService} from "../services/specimen.service";
 import {Specimen, X3dModel} from "../services/specimen-schema";
 import {Http} from "@angular/http";
-import {SectionModelSchema, ViewSectionSchema, DentinThicknessSchema} from "../services/section-schema";
+import {SectionModelSchema, ViewSectionSchema} from "../services/section-schema";
 import {ChartService} from "../services/chart.service";
 import {namedlist} from "../shared/utils";
 
@@ -165,26 +165,11 @@ export class ModelDetailPlainComponent implements OnInit {
         },
         lines: {
           dispatch: {
-            elementClick: function(e) {
-              console.log('clicked!');
-              console.log(e);
-              console.log();
+            elementClick: e =>  {
               var point = e[0].point[0];
-
-
-              //this.chartService.getActiveSection(point);
-
-              //this.updateSectionOutline(e[0].point[0]);
-            },
-            elementMouseover: function(e){
-              console.log('mouse over');
-              console.log(e);
-            },
-            elementDblClick: function(e){
-              console.log('mouse out!');
-              console.log(e);
+              this.chartService.getActiveSection(point);
+              this.updateSectionOutline(this.currentSection);
             }
-
           }
         }
       }
